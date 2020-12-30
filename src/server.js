@@ -1,6 +1,7 @@
 import express from 'express';
 import bodyParser from 'body-parser';
 import { MongoClient } from 'mongodb';
+import cors from 'cors';
 
 const PORT = 8000;
 const dbUrl = 'mongodb://localhost:27017';
@@ -8,6 +9,14 @@ const dbName = 'portfolio';
 
 const app = express();
 app.use(bodyParser.json());
+
+// Middleware to setup cors
+app.use((_req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", 'GET,PUT,POST,DELETE');
+  app.use(cors());
+  next();
+})
 
 const withDB = async (operations, res) => {
   try {
